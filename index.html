@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автоматизована система підрахунку рейтингу студентів</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Головна</a></li>
+            <li><a href="about.html">Про нас</a></li>
+            <li><a href="contact.html">Контакти</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Ласкаво просимо до нашої системи!</h1>
+        <p>Автоматизована система для підрахунку рейтингу студентів.</p>
+    </header>
+
+    <section>
+        <h2>Що ми пропонуємо?</h2>
+        <p>Наш проект дозволяє ефективно управляти рейтингом студентів, надаючи зручний інтерфейс для викладачів та студентів.</p>
+    </section>
+
+    <h1>Система рейтингу студентів</h1>
+
+    <section id="registration">
+        <h2>Реєстрація студента</h2>
+        <form id="registrationForm">
+            <input type="text" id="name" placeholder="Ім'я" required>
+            <input type="email" id="email" placeholder="Електронна пошта" required>
+            <button type="submit">Зареєструвати</button>
+        </form>
+    </section>
+
+    <section id="addGrade">
+        <h2>Додати оцінку</h2>
+        <form id="gradeForm">
+            <input type="number" id="studentId" placeholder="ID Студента" required>
+            <input type="text" id="course" placeholder="Курс" required>
+            <input type="number" id="grade" placeholder="Оцінка" required>
+            <button type="submit">Додати</button>
+        </form>
+    </section>
+
+    <section id="viewGrades">
+        <h2>Перегляд рейтингу студента</h2>
+        <input type="number" id="viewStudentId" placeholder="ID Студента" required>
+        <button id="viewButton">Переглянути рейтинг</button>
+        <ul id="gradesList"></ul>
+    </section>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            const response = await fetch('/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email }),
+            });
+
+            const result = await response.json();
+            alert('Студент зареєстрований з ID: ' + result.id);
+
+            // Очищення полів форми після успішної реєстрації
+            document.getElementById('registrationForm').reset();
+
+            // Переключення фокусу на форму для оцінок
+            document.getElementById('studentId').focus();
+        });
+
+        document.getElementById('gradeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('studentId').value;
+            const course = document.getElementById('course').value;
+            const grade = document.getElementById('grade').value;
+
+            await fetch('/grades', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ student_id: studentId, course, grade }),
+            });
+
+            alert('Оцінку додано!');
+
+            // Очищення полів форми після успішного додавання оцінки
+            document.getElementById('gradeForm').reset();
+            
+        });
+
+        document.getElementById('viewButton').addEventListener('click', async () => {
+            const studentId = document.getElementById('viewStudentId').value;
+
+            const response = await fetch(`/students/${studentId}/grades`);
+            const grades = await response.json();
+
+            const gradesList = document.getElementById('gradesList');
+            gradesList.innerHTML = '';
+            grades.forEach(grade => {
+                const li = document.createElement('li');
+                li.textContent = `Курс: ${grade.course}, Оцінка: ${grade.grade}`;
+                gradesList.appendChild(li);
+            });
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Автоматизована система підрахунку рейтингу студентів</p>
+    </footer>
+</body>
+</html>

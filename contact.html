@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакти - Автоматизована система підрахунку рейтингу студентів</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Головна</a></li>
+            <li><a href="about.html">Про нас</a></li>
+            <li><a href="contact.html">Контакти</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Контакти</h1>
+    </header>
+
+    <section>
+        <h2>Зворотній зв'язок</h2>
+        <form id="contact-form">
+            <input type="text" name="name" placeholder="Ваше ім'я" required>
+            <input type="email" name="email" placeholder="Електронна пошта" required>
+            <textarea name="message" placeholder="Ваше повідомлення" required></textarea>
+            <button type="submit">Відправити</button>
+            <div id="success-message" style="display:none;">Дякуємо за ваше повідомлення!</div>
+            <div id="error-message" style="display:none;">Це поле є обов'язковим.</div>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Автоматизована система підрахунку рейтингу студентів</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
